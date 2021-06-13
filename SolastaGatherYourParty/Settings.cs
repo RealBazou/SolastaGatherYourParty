@@ -14,5 +14,6 @@ namespace SolastaGatherYourParty
         public bool InvincibleParty = false;
         public bool IdleEnemies = false;
         public bool FogOfWar = true;
+        public int[] AIChoices = new int[Main.MAX_PARTY_SIZE];
     }
 }
