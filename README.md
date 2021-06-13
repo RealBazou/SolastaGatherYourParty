@@ -1,6 +1,6 @@
 # SolastaGatherYourParty
 
-My Mod Description
+Allows Solasta Custom Dungeons to be played with parties from 1 to 6 heroes.
 
 # How to Compile
 

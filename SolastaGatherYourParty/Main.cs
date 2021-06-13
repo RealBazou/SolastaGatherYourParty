@@ -1,17 +1,31 @@
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using UnityModManagerNet;
 using HarmonyLib;
-using I2.Loc;
-using SolastaModApi;
+using ModKit;
+using ModKit.Utility;
 
 namespace SolastaGatherYourParty
 {
+    public class Core
+    {
+
+    }
+
     public class Main
     {
-        public static readonly string MOD_FOLDER = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        public const int GAME_PARTY_SIZE = 4;
+
+        public const int MIN_PARTY_SIZE = 1;
+        public const int MAX_PARTY_SIZE = 6;
+
+        public const int DUNGEON_MIN_LEVEL = 1;
+        public const int DUNGEON_MAX_LEVEL = 20;
+
+        public const float ADVENTURE_PANEL_DEFAULT_SCALE = 0.75f;
+        public const float REST_PANEL_DEFAULT_SCALE = 0.8f;
+        public const float PARTY_CONTROL_PANEL_DEFAULT_SCALE = 0.95f;
 
         [Conditional("DEBUG")]
         internal static void Log(string msg) => Logger.Log(msg);
@@ -19,47 +33,13 @@ namespace SolastaGatherYourParty
         internal static void Error(string msg) => Logger?.Error(msg);
         internal static void Warning(string msg) => Logger?.Warning(msg);
         internal static UnityModManager.ModEntry.ModLogger Logger { get; private set; }
+        internal static ModManager<Core, Settings> Mod;
+        internal static MenuManager Menu;
 
-        internal static void LoadTranslations()
-        {
-            DirectoryInfo directoryInfo = new DirectoryInfo(MOD_FOLDER);
-            FileInfo[] files = directoryInfo.GetFiles($"Translations-??.txt");
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "")]
+        internal static Settings settings { get { return Mod.Settings; } }
 
-            foreach (var file in files)
-            {
-                var filename = Path.Combine(MOD_FOLDER, file.Name);
-                var code = file.Name.Substring(13, 2);
-                var languageSourceData = LocalizationManager.Sources[0];
-                var languageIndex = languageSourceData.GetLanguageIndexFromCode(code);
-
-                if (languageIndex < 0)
-                    Error($"language {code} not currently loaded.");
-                else
-                    using (var sr = new StreamReader(filename))
-                    {
-                        String line, term, text;
-                        while ((line = sr.ReadLine()) != null)
-                        {
-                            try
-                            {
-                                var splitted = line.Split(new[] { '\t', ' ' }, 2);
-                                term = splitted[0];
-                                text = splitted[1];
-                            } catch
-                            {
-                                Error($"invalid translation line \"{line}\".");
-                                continue;
-                            }
-                            if (languageSourceData.ContainsTerm(term))
-                            {
-                                languageSourceData.RemoveTerm(term);
-                                Warning($"official game term {term} was overwritten with \"{text}\"");
-                            }
-                            languageSourceData.AddTerm(term).Languages[languageIndex] = text;
-                        }
-                    }
-            }
-        }
+        public static bool Loaded = false;
 
         internal static bool Load(UnityModManager.ModEntry modEntry)
         {
@@ -67,7 +47,9 @@ namespace SolastaGatherYourParty
             {
                 Logger = modEntry.Logger;
 
-                LoadTranslations();
+                Mod = new ModManager<Core, Settings>();
+                Menu = new MenuManager();
+                modEntry.OnToggle = OnToggle;
 
                 var harmony = new Harmony(modEntry.Info.Id);
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
@@ -81,24 +63,21 @@ namespace SolastaGatherYourParty
             return true;
         }
 
-        internal static void ModEntryPoint()
+        static bool OnToggle(UnityModManager.ModEntry modEntry, bool enabled)
         {
-            // example: use the ModApi to get a skeleton blueprint
-            //
-            var skeleton = DatabaseHelper.MonsterDefinitions.Skeleton;
-
-            // example: how to add TEXTS to the game right
-            //
-            // . almost every game blueprint has a GuiPresentation attribute
-            // . GuiPresentation has a Title and a Description
-            // . Create an entry in Translations-en.txt for those (tab separated)
-            // . Refer to those entries when assigning values to these attributes
-            //
-            // . DON'T FORGET TO CLEAN UP THIS EXAMPLE AND Translations-en.txt file
-            // . ugly things will happen if you don't
-            //
-            skeleton.GuiPresentation.Title = "SolastaGatherYourParty/&FancySkeletonTitle";
-            skeleton.GuiPresentation.Description = "SolastaGatherYourParty/&FancySkeletonDescription";
+            if (enabled)
+            {
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                Mod.Enable(modEntry, assembly);
+                Menu.Enable(modEntry, assembly);
+            }
+            else
+            {
+                Menu.Disable(modEntry);
+                Mod.Disable(modEntry, false);
+                ReflectionCache.Clear();
+            }
+            return true;
         }
     }
 }
