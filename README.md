@@ -1,6 +1,13 @@
 # SolastaGatherYourParty
 
-Allows Solasta Custom Dungeons to be played with parties from 1 to 6 heroes.
+Unleash Solasta Custom Dungeons gameplay.
+
+# Features
+
+1. Allows custom party sizes from 1 to 6
+2. Allows min / max dungeon level requirements to be bypassed
+3. Invisibility, Idle Enemies and no Fog of War cheats
+4. (EXPERIMENTAL) AI controlled heroes in the party
 
 # How to Compile
 
