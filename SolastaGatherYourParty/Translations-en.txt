@@ -1,0 +1,2 @@
+SolastaGatherYourParty/&FancySkeletonTitle	Fancy Skeleton
+SolastaGatherYourParty/&FancySkeletonDescription	I'm a fancy skeleton
