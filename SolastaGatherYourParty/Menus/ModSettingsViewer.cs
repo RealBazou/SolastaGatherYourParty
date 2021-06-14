@@ -22,8 +22,10 @@ namespace SolastaGatherYourParty.Menus
             UI.Toggle("Bypass", ref Settings.DungeonLevelBypass, 0);
             UI.Slider("Dungeon Min Level", ref Settings.DungeonMinLevel,
                 DUNGEON_MIN_LEVEL, DUNGEON_MAX_LEVEL, DUNGEON_MIN_LEVEL, "", UI.AutoWidth());
+            if (Settings.DungeonMinLevel > Settings.DungeonMaxLevel) Settings.DungeonMaxLevel = Settings.DungeonMinLevel;
             UI.Slider("Dungeon Max Level", ref Settings.DungeonMaxLevel,
                 DUNGEON_MIN_LEVEL, DUNGEON_MAX_LEVEL, DUNGEON_MAX_LEVEL, "", UI.AutoWidth());
+            if (Settings.DungeonMaxLevel < Settings.DungeonMinLevel) Settings.DungeonMinLevel = Settings.DungeonMaxLevel;
 
             UI.Div();
             UI.Slider("Adventure Panel Scale", ref Settings.AdventurePanelScale,
@@ -35,8 +37,8 @@ namespace SolastaGatherYourParty.Menus
             UI.Slider("Victory Modal Scale", ref Settings.VictoryModalScale,
                 0.7f, 1.2f, VICTORY_MODAL_DEFAULT_SCALE, 2, "", UI.AutoWidth());
 
-            if (Settings.DungeonMinLevel > Settings.DungeonMaxLevel) Settings.DungeonMinLevel = Settings.DungeonMaxLevel;
-            if (Settings.DungeonMaxLevel < Settings.DungeonMinLevel) Settings.DungeonMaxLevel = Settings.DungeonMinLevel;
+            
+
         }
     }
 }
