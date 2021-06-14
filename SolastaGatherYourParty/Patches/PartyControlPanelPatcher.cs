@@ -1,14 +1,19 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using HarmonyLib;
 using System;
 using static SolastaGatherYourParty.Main;
+using static SolastaGatherYourParty.GatherYourPartySettings;
 
 namespace SolastaGatherYourParty.Patches
 {
-    class PartyControlPanelPatcher
+    internal static class PartyControlPanelPatcher
     {
+        internal static IGameLocationCharacterService GameLocationCharacterService => ServiceRepository.GetService<IGameLocationCharacterService>();
+        internal static List<GameLocationCharacter> PartyCharacters => GameLocationCharacterService.PartyCharacters;
+
         [HarmonyPatch(typeof(PartyControlPanel), "OnBeginShow")]
-        internal static class NewAdventurePanel_OnBeginShow_Patch
+        internal static class PartyControlPanel_OnBeginShow_Patch
         {
             internal static Vector3 originalPlatesTableScale = new Vector3();
 
@@ -18,9 +23,9 @@ namespace SolastaGatherYourParty.Patches
                 {
                     originalPlatesTableScale = ___partyPlatesTable.localScale;
                 }
-                if (settings.PartySize > GAME_PARTY_SIZE)
+                if (PartyCharacters.Count > GAME_PARTY_SIZE)
                 {
-                    var scale = (float)Math.Pow(settings.PartyControlPanelScale, settings.PartySize - GAME_PARTY_SIZE);
+                    var scale = (float)Math.Pow(Settings.PartyControlPanelScale, PartyCharacters.Count - GAME_PARTY_SIZE);
                     ___partyPlatesTable.localScale = originalPlatesTableScale * scale;
                 }
             }

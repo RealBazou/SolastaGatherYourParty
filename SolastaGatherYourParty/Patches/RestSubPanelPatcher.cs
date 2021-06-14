@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using HarmonyLib;
 using static SolastaGatherYourParty.Main;
+using static SolastaGatherYourParty.GatherYourPartySettings;
 
 namespace SolastaGatherYourParty.Patches
 {
     internal static class RestSubPanelPatcher
     {
+        internal static IGameLocationCharacterService GameLocationCharacterService => ServiceRepository.GetService<IGameLocationCharacterService>();
+        internal static List<GameLocationCharacter> PartyCharacters => GameLocationCharacterService.PartyCharacters;
+
         [HarmonyPatch(typeof(RestSubPanel), "OnBeginShow")]
         internal static class RestSubPanel_OnBeginShow_Patch
         {
@@ -23,9 +28,9 @@ namespace SolastaGatherYourParty.Patches
                 {
                     originalPlatesScale = ___characterPlatesTable.localScale;
                 }
-                if (settings.PartySize > GAME_PARTY_SIZE)
+                if (PartyCharacters.Count > GAME_PARTY_SIZE)
                 {
-                    var scale = (float)Math.Pow(settings.RestPanelScale, settings.PartySize - GAME_PARTY_SIZE);
+                    var scale = (float)Math.Pow(Settings.RestPanelScale, PartyCharacters.Count - GAME_PARTY_SIZE);
                     ___restModulesTable.localScale = originalModulesScale * scale;
                     ___characterPlatesTable.localScale = originalPlatesScale * scale;
                 }

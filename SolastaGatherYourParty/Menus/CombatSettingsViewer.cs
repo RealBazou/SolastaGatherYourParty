@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityModManagerNet;
 using ModKit;
-using static SolastaGatherYourParty.Main;
+using static SolastaGatherYourParty.GatherYourPartySettings;
 
 namespace SolastaGatherYourParty.Menus
 {
@@ -12,7 +12,7 @@ namespace SolastaGatherYourParty.Menus
         internal static IGameLocationCharacterService GameLocationCharacterService => ServiceRepository.GetService<IGameLocationCharacterService>();
         internal static List<GameLocationCharacter> PartyCharacters => GameLocationCharacterService.PartyCharacters;
 
-        internal static int[] AIChoices = new int[Main.MAX_PARTY_SIZE];
+        internal static int[] AIChoices = new int[MAX_PARTY_SIZE];
 
         public string Name => "Combat Settings";
 
@@ -51,7 +51,7 @@ namespace SolastaGatherYourParty.Menus
 
         public void OnGUI(UnityModManager.ModEntry modEntry)
         {
-            if (Mod == null || !Mod.Enabled) return;
+            if (Main.Mod == null || !Main.Mod.Enabled) return;
 
             if (GameLocationCharacterService == null || PartyCharacters == null)
             {
