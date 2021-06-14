@@ -15,12 +15,6 @@ namespace SolastaGatherYourParty.Menus
         {
             if (Mod == null || !Mod.Enabled) return;
 
-            if(!Gui.Game.GameCampaign.GameTime.Paused)
-            {
-                Gui.PauseGameAsNeeded();
-                Paused = true;
-            }
-
             UI.Slider("Party Size", ref Settings.PartySize,
                 MIN_PARTY_SIZE, MAX_PARTY_SIZE, GAME_PARTY_SIZE, "", UI.AutoWidth());
 
@@ -42,9 +36,6 @@ namespace SolastaGatherYourParty.Menus
                 0.7f, 1.2f, PARTY_CONTROL_PANEL_DEFAULT_SCALE, 2, "", UI.AutoWidth());
             UI.Slider("Victory Modal Scale", ref Settings.VictoryModalScale,
                 0.7f, 1.2f, VICTORY_MODAL_DEFAULT_SCALE, 2, "", UI.AutoWidth());
-
-            
-
         }
     }
 }

@@ -15,8 +15,6 @@ namespace SolastaGatherYourParty.Menus
         {
             if (Mod == null || !Mod.Enabled) return;
 
-            Gui.PauseGameAsNeeded();
-
             UI.Toggle("Invincible Party", ref Settings.InvincibleParty, 0, UI.AutoWidth());
             UI.Toggle("Idle Enemies", ref Settings.IdleEnemies, 0, UI.AutoWidth());
             UI.Toggle("No Fog of War", ref Settings.NoFogOfWar, 0, UI.AutoWidth());
