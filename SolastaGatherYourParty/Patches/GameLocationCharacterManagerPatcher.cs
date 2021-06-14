@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using HarmonyLib;
+﻿using HarmonyLib;
 using static SolastaGatherYourParty.Main;
 using static SolastaGatherYourParty.GatherYourPartySettings;
 
