@@ -31,22 +31,24 @@ namespace SolastaGatherYourParty.Patches
             internal static void Prefix(RectTransform ___characterSessionPlatesTable)
             {
                 DatabaseHelper.CampaignDefinitions.UserCampaign.SetPartySize<CampaignDefinition>(Settings.PartySize);
+                //DatabaseHelper.CampaignDefinitions.CrownOfTheMagister.SetPartySize<CampaignDefinition>(Math.Max(Settings.PartySize, GAME_PARTY_SIZE));
 
-                if (originalSessionPlatesScale.x == 0)
-                {
-                    originalSessionPlatesScale = ___characterSessionPlatesTable.localScale;
-                }
                 if (Settings.PartySize > GAME_PARTY_SIZE)
                 {
+                    if (originalSessionPlatesScale.x == 0)
+                    {
+                        originalSessionPlatesScale = ___characterSessionPlatesTable.localScale;
+                    }
+
                     var scale = (float)Math.Pow(Settings.AdventurePanelScale, Settings.PartySize - GAME_PARTY_SIZE);
                     ___characterSessionPlatesTable.localScale = originalSessionPlatesScale * scale;
+
                     for (var i = GAME_PARTY_SIZE; i < Settings.PartySize; i++)
                     {
                         var plate = UnityEngine.Object.Instantiate(___characterSessionPlatesTable.GetChild(0));
                         plate.SetParent(___characterSessionPlatesTable.GetChild(0).parent, false);
                     }
                 }
-
             }
         }
     }
