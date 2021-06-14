@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using HarmonyLib;
 using static SolastaGatherYourParty.Main;
@@ -9,9 +8,6 @@ namespace SolastaGatherYourParty.Patches
 {
     internal static class RestSubPanelPatcher
     {
-        internal static IGameLocationCharacterService GameLocationCharacterService => ServiceRepository.GetService<IGameLocationCharacterService>();
-        internal static List<GameLocationCharacter> PartyCharacters => GameLocationCharacterService.PartyCharacters;
-
         [HarmonyPatch(typeof(RestSubPanel), "OnBeginShow")]
         internal static class RestSubPanel_OnBeginShow_Patch
         {
@@ -20,17 +16,20 @@ namespace SolastaGatherYourParty.Patches
 
             internal static void Prefix(RectTransform ___characterPlatesTable, RectTransform ___restModulesTable)
             {
-                if (originalModulesScale.x == 0)
+                var party = ServiceRepository.GetService<IGameLocationCharacterService>()?.PartyCharacters;
+
+                if (party?.Count > GAME_PARTY_SIZE)
                 {
-                    originalModulesScale = ___restModulesTable.localScale;
-                }
-                if (originalPlatesScale.x == 0)
-                {
-                    originalPlatesScale = ___characterPlatesTable.localScale;
-                }
-                if (PartyCharacters.Count > GAME_PARTY_SIZE)
-                {
-                    var scale = (float)Math.Pow(Settings.RestPanelScale, PartyCharacters.Count - GAME_PARTY_SIZE);
+                    if (originalModulesScale.x == 0)
+                    {
+                        originalModulesScale = ___restModulesTable.localScale;
+                    }
+                    if (originalPlatesScale.x == 0)
+                    {
+                        originalPlatesScale = ___characterPlatesTable.localScale;
+                    }
+
+                    var scale = (float)Math.Pow(Settings.RestPanelScale, party.Count - GAME_PARTY_SIZE);
                     ___restModulesTable.localScale = originalModulesScale * scale;
                     ___characterPlatesTable.localScale = originalPlatesScale * scale;
                 }

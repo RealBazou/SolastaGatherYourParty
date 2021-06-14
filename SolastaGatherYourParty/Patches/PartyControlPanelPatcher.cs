@@ -9,9 +9,6 @@ namespace SolastaGatherYourParty.Patches
 {
     internal static class PartyControlPanelPatcher
     {
-        internal static IGameLocationCharacterService GameLocationCharacterService => ServiceRepository.GetService<IGameLocationCharacterService>();
-        internal static List<GameLocationCharacter> PartyCharacters => GameLocationCharacterService.PartyCharacters;
-
         [HarmonyPatch(typeof(PartyControlPanel), "OnBeginShow")]
         internal static class PartyControlPanel_OnBeginShow_Patch
         {
@@ -19,15 +16,18 @@ namespace SolastaGatherYourParty.Patches
 
             internal static void Prefix(RectTransform ___partyPlatesTable)
             {
-                if (originalPlatesTableScale.x == 0)
+                var party = ServiceRepository.GetService<IGameLocationCharacterService>()?.PartyCharacters;
+
+                if (party?.Count > GAME_PARTY_SIZE)
                 {
-                    originalPlatesTableScale = ___partyPlatesTable.localScale;
-                }
-                if (PartyCharacters.Count > GAME_PARTY_SIZE)
-                {
-                    var scale = (float)Math.Pow(Settings.PartyControlPanelScale, PartyCharacters.Count - GAME_PARTY_SIZE);
+                    if (originalPlatesTableScale.x == 0)
+                    {
+                        originalPlatesTableScale = ___partyPlatesTable.localScale;
+                    }
+
+                     var scale = (float)Math.Pow(Settings.PartyControlPanelScale, party.Count - GAME_PARTY_SIZE);
                     ___partyPlatesTable.localScale = originalPlatesTableScale * scale;
-                }
+                }    
             }
         }
     }

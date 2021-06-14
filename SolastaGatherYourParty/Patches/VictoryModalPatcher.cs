@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using HarmonyLib;
 using static SolastaGatherYourParty.Main;
@@ -9,28 +8,28 @@ namespace SolastaGatherYourParty.Patches
 {
     internal static class VictoryModalPatcher
     {
-        internal static IGameLocationCharacterService GameLocationCharacterService => ServiceRepository.GetService<IGameLocationCharacterService>();
-        internal static List<GameLocationCharacter> PartyCharacters => GameLocationCharacterService.PartyCharacters;
-
         [HarmonyPatch(typeof(VictoryModal), "OnBeginShow")]
         internal static class VictoryModal_OnBeginShow_Patch
         {
-            internal static Vector3 partyStatCellsContainerScale = new Vector3();
-            internal static Vector3 heroStatsGroupScale = new Vector3();
+            internal static Vector3 partyStatCellsContainerScale;
+            internal static Vector3 heroStatsGroupScale;
 
-            internal static void Prefix(VictoryModal __instance, RectTransform ___partyStatCellsContainer, RectTransform ___heroStatsGroup)
+            internal static void Prefix(RectTransform ___partyStatCellsContainer, RectTransform ___heroStatsGroup)
             {
-                if (partyStatCellsContainerScale.x == 0)
+                var party = ServiceRepository.GetService<IGameLocationCharacterService>()?.PartyCharacters;
+
+                if (party?.Count > GAME_PARTY_SIZE)
                 {
-                    partyStatCellsContainerScale = ___partyStatCellsContainer.localScale;
-                }
-                if (heroStatsGroupScale.x == 0)
-                {
-                    heroStatsGroupScale = ___heroStatsGroup.localScale;
-                }
-                if (PartyCharacters.Count > GAME_PARTY_SIZE)
-                {
-                    var scale = (float)Math.Pow(Settings.VictoryModalScale, PartyCharacters.Count - GAME_PARTY_SIZE);
+                    if (partyStatCellsContainerScale == null)
+                    {
+                        partyStatCellsContainerScale = ___partyStatCellsContainer.localScale;
+                    }
+                    if (heroStatsGroupScale == null)
+                    {
+                        heroStatsGroupScale = ___partyStatCellsContainer.localScale;
+                    }
+
+                    var scale = (float)Math.Pow(Settings.VictoryModalScale, party.Count - GAME_PARTY_SIZE);
                     ___partyStatCellsContainer.localScale = partyStatCellsContainerScale * scale;
                     ___heroStatsGroup.localScale = heroStatsGroupScale * scale;
                 }
