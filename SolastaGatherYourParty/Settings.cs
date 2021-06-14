@@ -6,6 +6,7 @@ namespace SolastaGatherYourParty
     {
 
         public int PartySize = 4;
+        public bool DungeonLevelBypass = false;
         public int DungeonMinLevel = 1;
         public int DungeonMaxLevel = 20;
         public float AdventurePanelScale = 0.75f;
@@ -13,7 +14,6 @@ namespace SolastaGatherYourParty
         public float PartyControlPanelScale = 0.95f;
         public bool InvincibleParty = false;
         public bool IdleEnemies = false;
-        public bool FogOfWar = true;
-        public int[] AIChoices = new int[Main.MAX_PARTY_SIZE];
+        public bool NoFogOfWar = false;
     }
 }

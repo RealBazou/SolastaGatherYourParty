@@ -14,7 +14,7 @@ namespace SolastaGatherYourParty.Patches
         {
             internal static void Prefix(UserLocation userLocation)
             {
-                if (userLocation != null)
+                if (userLocation != null && settings.DungeonLevelBypass)
                 {
                     userLocation.StartLevelMin = settings.DungeonMinLevel;
                     userLocation.StartLevelMax = settings.DungeonMaxLevel;
@@ -30,6 +30,7 @@ namespace SolastaGatherYourParty.Patches
             internal static void Prefix(RectTransform ___characterSessionPlatesTable)
             {
                 DatabaseHelper.CampaignDefinitions.UserCampaign.SetPartySize<CampaignDefinition>(settings.PartySize);
+
                 if (originalSessionPlatesScale.x == 0)
                 {
                     originalSessionPlatesScale = ___characterSessionPlatesTable.localScale;
