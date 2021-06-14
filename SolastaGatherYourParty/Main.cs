@@ -74,11 +74,6 @@ namespace SolastaGatherYourParty
             return true;
         }
 
-        static void DOIT()
-        {
-
-        }
-
         static bool OnToggle(UnityModManager.ModEntry modEntry, bool enabled)
         {
             if (enabled)
