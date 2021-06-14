@@ -15,6 +15,12 @@ namespace SolastaGatherYourParty.Menus
         {
             if (Mod == null || !Mod.Enabled) return;
 
+            if(!Gui.Game.GameCampaign.GameTime.Paused)
+            {
+                Gui.PauseGameAsNeeded();
+                Paused = true;
+            }
+
             UI.Slider("Party Size", ref Settings.PartySize,
                 MIN_PARTY_SIZE, MAX_PARTY_SIZE, GAME_PARTY_SIZE, "", UI.AutoWidth());
 

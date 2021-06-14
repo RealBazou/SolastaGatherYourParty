@@ -13,8 +13,9 @@ namespace SolastaGatherYourParty.Menus
 
         public void OnGUI(UnityModManager.ModEntry modEntry)
         {
-            if (Mod == null || !Mod.Enabled)
-                return;
+            if (Mod == null || !Mod.Enabled) return;
+
+            Gui.PauseGameAsNeeded();
 
             UI.Toggle("Invincible Party", ref Settings.InvincibleParty, 0, UI.AutoWidth());
             UI.Toggle("Idle Enemies", ref Settings.IdleEnemies, 0, UI.AutoWidth());

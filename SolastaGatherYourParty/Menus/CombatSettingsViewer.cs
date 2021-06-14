@@ -53,6 +53,8 @@ namespace SolastaGatherYourParty.Menus
         {
             if (Main.Mod == null || !Main.Mod.Enabled) return;
 
+            Gui.PauseGameAsNeeded();
+
             if (GameLocationCharacterService == null || PartyCharacters == null)
             {
                 UI.Label("Party AI: Load or start new a game.", UI.AutoWidth());
