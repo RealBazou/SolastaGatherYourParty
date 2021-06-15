@@ -3,9 +3,9 @@ using ModKit;
 using static SolastaGatherYourParty.Main;
 using static SolastaGatherYourParty.GatherYourPartySettings;
 
-namespace SolastaGatherYourParty.Menus
+namespace SolastaGatherYourParty.Menus.Viewers
 {
-    public class ModSettingsViewer : IMenuSelectablePage
+    public class ModSettings : IMenuSelectablePage
     {
         public string Name => "Mod Settings";
 

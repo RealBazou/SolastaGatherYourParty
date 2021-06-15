@@ -1,9 +1,9 @@
 ﻿using UnityModManagerNet;
 using ModKit;
 
-namespace SolastaGatherYourParty.Menus
+namespace SolastaGatherYourParty.Menus.Viewers
 {
-    public class CombatSettingsViewer : IMenuSelectablePage
+    public class CombatSettings : IMenuSelectablePage
     {
         public string Name => "Combat Settings";
 

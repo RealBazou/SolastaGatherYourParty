@@ -1,31 +1,12 @@
-﻿using UnityEngine;
-using UnityModManagerNet;
-using ModKit;
-using static SolastaGatherYourParty.Main;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SolastaGatherYourParty.Menus
+namespace SolastaGatherYourParty.Menus.Controllers
 {
-    public class CheatsViewer : IMenuSelectablePage
-    {
-        public string Name => "Cheats";
-
-        public int Priority => 2;
-
-        public void OnGUI(UnityModManager.ModEntry modEntry)
-        {
-            if (Mod == null || !Mod.Enabled) return;
-
-            UI.Toggle("Invincible Party", ref Settings.InvincibleParty, 0, UI.AutoWidth());
-            UI.Toggle("Idle Enemies", ref Settings.IdleEnemies, 0, UI.AutoWidth());
-            UI.Toggle("No Fog of War", ref Settings.NoFogOfWar, 0, UI.AutoWidth());
-
-            CheatsController.SetPartyInvicible(Settings.InvincibleParty);
-            CheatsController.SetMonstersIdle(Settings.IdleEnemies);
-            CheatsController.SetFogOfWar(Settings.NoFogOfWar);
-        }
-    }
-
-    public static class CheatsController
+    public static class Cheats
     {
         public static void SetPartyInvicible(bool invincible)
         {
