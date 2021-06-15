@@ -50,7 +50,7 @@ namespace SolastaGatherYourParty
         internal static MenuManager Menu;
         internal static GatherYourPartySettings Settings { get { return Mod.Settings; } }
 
-        public static bool Loaded = false;
+        internal static int[] AIChoices = new int[GatherYourPartySettings.MAX_PARTY_SIZE];
 
         internal static bool Load(UnityModManager.ModEntry modEntry)
         {
