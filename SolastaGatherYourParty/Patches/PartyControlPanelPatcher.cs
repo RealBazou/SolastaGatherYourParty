@@ -17,16 +17,17 @@ namespace SolastaGatherYourParty.Patches
             {
                 var party = ServiceRepository.GetService<IGameLocationCharacterService>()?.PartyCharacters;
 
+                if (originalPlatesTableScale.x == 0)
+                {
+                    originalPlatesTableScale = ___partyPlatesTable.localScale;
+                }
                 if (party?.Count > GAME_PARTY_SIZE)
                 {
-                    if (originalPlatesTableScale.x == 0)
-                    {
-                        originalPlatesTableScale = ___partyPlatesTable.localScale;
-                    }
-
-                     var scale = (float)Math.Pow(Settings.PartyControlPanelScale, party.Count - GAME_PARTY_SIZE);
+                    var scale = (float)Math.Pow(Settings.PartyControlPanelScale, party.Count - GAME_PARTY_SIZE);
                     ___partyPlatesTable.localScale = originalPlatesTableScale * scale;
-                }    
+                }
+                else
+                    ___partyPlatesTable.localScale = originalPlatesTableScale;
             }
         }
     }

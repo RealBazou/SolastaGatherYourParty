@@ -32,13 +32,12 @@ namespace SolastaGatherYourParty.Patches
             {
                 DatabaseHelper.CampaignDefinitions.UserCampaign.SetPartySize<CampaignDefinition>(Settings.PartySize);
 
+                if (originalSessionPlatesScale.x == 0)
+                {
+                    originalSessionPlatesScale = ___characterSessionPlatesTable.localScale;
+                }
                 if (Settings.PartySize > GAME_PARTY_SIZE)
                 {
-                    if (originalSessionPlatesScale.x == 0)
-                    {
-                        originalSessionPlatesScale = ___characterSessionPlatesTable.localScale;
-                    }
-
                     var scale = (float)Math.Pow(Settings.AdventurePanelScale, Settings.PartySize - GAME_PARTY_SIZE);
                     ___characterSessionPlatesTable.localScale = originalSessionPlatesScale * scale;
 
@@ -48,6 +47,8 @@ namespace SolastaGatherYourParty.Patches
                         plate.SetParent(___characterSessionPlatesTable.GetChild(0).parent, false);
                     }
                 }
+                else
+                    ___characterSessionPlatesTable.localScale = originalSessionPlatesScale;
             }
         }
     }

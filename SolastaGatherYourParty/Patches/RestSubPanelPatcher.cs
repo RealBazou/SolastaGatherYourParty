@@ -18,20 +18,23 @@ namespace SolastaGatherYourParty.Patches
             {
                 var party = ServiceRepository.GetService<IGameLocationCharacterService>()?.PartyCharacters;
 
+                if (originalModulesScale.x == 0)
+                {
+                    originalModulesScale = ___restModulesTable.localScale;
+                }
+                if (originalPlatesScale.x == 0)
+                {
+                    originalPlatesScale = ___characterPlatesTable.localScale;
+                }
                 if (party?.Count > GAME_PARTY_SIZE)
                 {
-                    if (originalModulesScale.x == 0)
-                    {
-                        originalModulesScale = ___restModulesTable.localScale;
-                    }
-                    if (originalPlatesScale.x == 0)
-                    {
-                        originalPlatesScale = ___characterPlatesTable.localScale;
-                    }
-
                     var scale = (float)Math.Pow(Settings.RestPanelScale, party.Count - GAME_PARTY_SIZE);
                     ___restModulesTable.localScale = originalModulesScale * scale;
                     ___characterPlatesTable.localScale = originalPlatesScale * scale;
+                } else
+                {
+                    ___restModulesTable.localScale = originalModulesScale;
+                    ___characterPlatesTable.localScale = originalPlatesScale;
                 }
             }
         }
