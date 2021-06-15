@@ -1,25 +1,26 @@
 ﻿using HarmonyLib;
-using System.Collections.Generic;
 
 namespace SolastaGatherYourParty.Patches
 {
     internal static class GameLocationBattlePatcher
     {
-        internal static PlayerController PlayerAIController;
-        internal static PlayerController PlayerHumanController => ServiceRepository.GetService<IPlayerControllerService>().ActivePlayerController;
+        internal const int IN_BATTLE = -1;
+        internal const int OUT_BATTLE = -2;
+        internal static int CurrentRound = OUT_BATTLE;
 
-        internal static int StartRound = -2; // keep a state as these methods are triggered twice in a battle
+        internal static PlayerController AiPlayerController;
+        internal static PlayerController ActivePlayerController => ServiceRepository.GetService<IPlayerControllerService>().ActivePlayerController;
 
         [HarmonyPatch(typeof(GameLocationBattle), "Initialize")]
         internal static class GameLocationBattle_Initialize_Patch
         {
             internal static void Prefix(GameLocationBattle __instance)
             {
-                if (StartRound == -2)
+                if (CurrentRound == OUT_BATTLE)
                 {
-                    PlayerAIController = new PlayerController(1, "PlayerAI", PlayerController.ControllerType.AI, RuleDefinitions.Side.Ally);
-                    ServiceRepository.GetService<IPlayerControllerService>().RegisterPlayerController(PlayerAIController);
-                    StartRound = -1;
+                    AiPlayerController = new PlayerController(1, "PlayerAI", PlayerController.ControllerType.AI, RuleDefinitions.Side.Ally);
+                    ServiceRepository.GetService<IPlayerControllerService>().RegisterPlayerController(AiPlayerController);
+                    CurrentRound = IN_BATTLE;
                 }
             }
         }
@@ -29,21 +30,17 @@ namespace SolastaGatherYourParty.Patches
         {
             internal static void Prefix(GameLocationBattle __instance)
             {
-                if (StartRound != __instance.CurrentRound)
+                if (CurrentRound != __instance.CurrentRound)
                 {
                     var party = ServiceRepository.GetService<IGameLocationCharacterService>()?.PartyCharacters;
 
-                    if (party != null)
+                    for (var index = 0; index < party.Count; index++)
                     {
-                        for (var index = 0; index < party.Count; index++)
-                        {
-                            party[index].ControllerId = Main.AIChoices[index];
-                        }
-                        PlayerHumanController.DirtyControlledCharacters();
-                        PlayerAIController.DirtyControlledCharacters();
+                        party[index].ControllerId = Main.AIChoices[index];
                     }
-
-                    StartRound = __instance.CurrentRound;
+                    ActivePlayerController.DirtyControlledCharacters();
+                    AiPlayerController.DirtyControlledCharacters();
+                    CurrentRound = __instance.CurrentRound;
                 }
             }
         }
@@ -53,7 +50,7 @@ namespace SolastaGatherYourParty.Patches
         {
             internal static void Prefix(GameLocationBattle __instance)
             {
-                if (StartRound != -2)
+                if (CurrentRound != OUT_BATTLE)
                 {
                     var party = ServiceRepository.GetService<IGameLocationCharacterService>()?.PartyCharacters;
 
@@ -61,11 +58,10 @@ namespace SolastaGatherYourParty.Patches
                     {
                         party[index].ControllerId = 0;
                     }
-                    PlayerHumanController.DirtyControlledCharacters();
-                    PlayerAIController.DirtyControlledCharacters();
-                    ServiceRepository.GetService<IPlayerControllerService>().UnregisterPlayerController(PlayerAIController);
-
-                    StartRound = -2;
+                    ActivePlayerController.DirtyControlledCharacters();
+                    AiPlayerController.DirtyControlledCharacters();
+                    ServiceRepository.GetService<IPlayerControllerService>().UnregisterPlayerController(AiPlayerController);
+                    CurrentRound = OUT_BATTLE;
                 }
             }
         }

@@ -19,13 +19,13 @@ namespace SolastaGatherYourParty.Menus
             UI.Toggle("Idle Enemies", ref Settings.IdleEnemies, 0, UI.AutoWidth());
             UI.Toggle("No Fog of War", ref Settings.NoFogOfWar, 0, UI.AutoWidth());
 
-            Cheats.SetPartyInvicible(Settings.InvincibleParty);
-            Cheats.SetMonstersIdle(Settings.IdleEnemies);
-            Cheats.SetFogOfWar(Settings.NoFogOfWar);
+            CheatsController.SetPartyInvicible(Settings.InvincibleParty);
+            CheatsController.SetMonstersIdle(Settings.IdleEnemies);
+            CheatsController.SetFogOfWar(Settings.NoFogOfWar);
         }
     }
 
-    public static class Cheats
+    public static class CheatsController
     {
         public static void SetPartyInvicible(bool invincible)
         {

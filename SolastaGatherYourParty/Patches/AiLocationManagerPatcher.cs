@@ -9,22 +9,12 @@ namespace SolastaGatherYourParty.Patches
         {
             internal static void Prefix(AiLocationManager __instance, GameLocationCharacter character)
             {
-                var controllers = ServiceRepository.GetService<IPlayerControllerService>();
-
-                if (character.ControllerId == 8)
-                {
-                   
-                }
+                ;
             }
         
             internal static void Postfix(AiLocationManager __instance, GameLocationCharacter character)
             {
-                var controllers = ServiceRepository.GetService<IPlayerControllerService>();
-
-                if (character.ControllerId == 8)
-                {
-                    
-                }
+                ;
             }
         }
     }

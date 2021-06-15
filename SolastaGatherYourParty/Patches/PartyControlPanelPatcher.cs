@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using HarmonyLib;
 using System;
 using static SolastaGatherYourParty.Main;

@@ -31,7 +31,6 @@ namespace SolastaGatherYourParty.Patches
             internal static void Prefix(RectTransform ___characterSessionPlatesTable)
             {
                 DatabaseHelper.CampaignDefinitions.UserCampaign.SetPartySize<CampaignDefinition>(Settings.PartySize);
-                //DatabaseHelper.CampaignDefinitions.CrownOfTheMagister.SetPartySize<CampaignDefinition>(Math.Max(Settings.PartySize, GAME_PARTY_SIZE));
 
                 if (Settings.PartySize > GAME_PARTY_SIZE)
                 {
