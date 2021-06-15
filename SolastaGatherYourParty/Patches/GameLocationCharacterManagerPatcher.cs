@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using static SolastaGatherYourParty.Main;
 using static SolastaGatherYourParty.GatherYourPartySettings;
 
 namespace SolastaGatherYourParty.Patches
