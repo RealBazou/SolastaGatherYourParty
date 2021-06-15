@@ -9,7 +9,11 @@ namespace SolastaGatherYourParty.Patches
         internal static int CurrentRound = OUT_BATTLE;
 
         internal static PlayerController AiPlayerController;
-        internal static PlayerController ActivePlayerController => ServiceRepository.GetService<IPlayerControllerService>().ActivePlayerController;
+
+        internal static PlayerController GetActivePlayerController()
+        {
+            return ServiceRepository.GetService<IPlayerControllerService>().ActivePlayerController;
+        }
 
         [HarmonyPatch(typeof(GameLocationBattle), "Initialize")]
         internal static class GameLocationBattle_Initialize_Patch
@@ -38,7 +42,7 @@ namespace SolastaGatherYourParty.Patches
                     {
                         party[index].ControllerId = Main.AIChoices[index];
                     }
-                    ActivePlayerController.DirtyControlledCharacters();
+                    GetActivePlayerController().DirtyControlledCharacters();
                     AiPlayerController.DirtyControlledCharacters();
                     CurrentRound = __instance.CurrentRound;
                 }
@@ -58,7 +62,7 @@ namespace SolastaGatherYourParty.Patches
                     {
                         party[index].ControllerId = 0;
                     }
-                    ActivePlayerController.DirtyControlledCharacters();
+                    GetActivePlayerController().DirtyControlledCharacters();
                     AiPlayerController.DirtyControlledCharacters();
                     ServiceRepository.GetService<IPlayerControllerService>().UnregisterPlayerController(AiPlayerController);
                     CurrentRound = OUT_BATTLE;
