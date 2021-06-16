@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SolastaGatherYourParty.Menus.Controllers
+namespace SolastaGatherYourParty.Controllers
 {
     public static class Cheats
     {
@@ -28,9 +24,8 @@ namespace SolastaGatherYourParty.Menus.Controllers
         public static void SetFogOfWar(bool disabled)
         {
             IGraphicsLocationPostProcessService service = ServiceRepository.GetService<IGraphicsLocationPostProcessService>();
-            if (service == null)
-                return;
-            service.FowEnabled = !disabled;
+            if (service != null)
+                service.FowEnabled = !disabled;
         }
 
         public static void SetMonstersIdle(bool idleEnemies)

@@ -1,7 +1,7 @@
 ﻿using UnityModManagerNet;
 using ModKit;
 
-namespace SolastaGatherYourParty.Menus.Viewers
+namespace SolastaGatherYourParty.Viewers
 {
     public class CombatSettings : IMenuSelectablePage
     {

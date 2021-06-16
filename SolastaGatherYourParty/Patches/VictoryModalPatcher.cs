@@ -1,8 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using HarmonyLib;
-using static SolastaGatherYourParty.Main;
-using static SolastaGatherYourParty.GatherYourPartySettings;
+using static SolastaGatherYourParty.Settings;
 
 namespace SolastaGatherYourParty.Patches
 {
@@ -11,31 +10,17 @@ namespace SolastaGatherYourParty.Patches
         [HarmonyPatch(typeof(VictoryModal), "OnBeginShow")]
         internal static class VictoryModal_OnBeginShow_Patch
         {
-            internal static Vector3 originalPartyStatCellsContainerScale;
-            internal static Vector3 originalHeroStatsGroupScale;
-
             internal static void Prefix(RectTransform ___partyStatCellsContainer, RectTransform ___heroStatsGroup)
             {
                 var party = ServiceRepository.GetService<IGameLocationCharacterService>()?.PartyCharacters;
 
-                if (originalPartyStatCellsContainerScale == null)
-                {
-                    originalPartyStatCellsContainerScale = ___partyStatCellsContainer.localScale;
-                }
-                if (originalHeroStatsGroupScale == null)
-                {
-                    originalHeroStatsGroupScale = ___partyStatCellsContainer.localScale;
-                }
                 if (party?.Count > GAME_PARTY_SIZE)
                 {
-                    var scale = (float)Math.Pow(Settings.VictoryModalScale, party.Count - GAME_PARTY_SIZE);
-                    ___partyStatCellsContainer.localScale = originalPartyStatCellsContainerScale * scale;
-                    ___heroStatsGroup.localScale = originalHeroStatsGroupScale * scale;
+                    var scale = (float)Math.Pow(Main.Settings.VictoryModalScale, party.Count - GAME_PARTY_SIZE);
+                    ___heroStatsGroup.localScale = new Vector3(scale, 1, scale);
+                    
                 } else
-                {
-                    ___partyStatCellsContainer.localScale = originalPartyStatCellsContainerScale;
-                    ___heroStatsGroup.localScale = originalHeroStatsGroupScale;
-                }
+                    ___heroStatsGroup.localScale = new Vector3(1, 1, 1);
             }
         }
     }

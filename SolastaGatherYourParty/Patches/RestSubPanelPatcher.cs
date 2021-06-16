@@ -1,8 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using HarmonyLib;
-using static SolastaGatherYourParty.Main;
-using static SolastaGatherYourParty.GatherYourPartySettings;
+using static SolastaGatherYourParty.Settings;
 
 namespace SolastaGatherYourParty.Patches
 {
@@ -11,30 +10,19 @@ namespace SolastaGatherYourParty.Patches
         [HarmonyPatch(typeof(RestSubPanel), "OnBeginShow")]
         internal static class RestSubPanel_OnBeginShow_Patch
         {
-            internal static Vector3 originalModulesScale = new Vector3();
-            internal static Vector3 originalPlatesScale = new Vector3();
-
             internal static void Prefix(RectTransform ___characterPlatesTable, RectTransform ___restModulesTable)
             {
                 var party = ServiceRepository.GetService<IGameLocationCharacterService>()?.PartyCharacters;
 
-                if (originalModulesScale.x == 0)
-                {
-                    originalModulesScale = ___restModulesTable.localScale;
-                }
-                if (originalPlatesScale.x == 0)
-                {
-                    originalPlatesScale = ___characterPlatesTable.localScale;
-                }
                 if (party?.Count > GAME_PARTY_SIZE)
                 {
-                    var scale = (float)Math.Pow(Settings.RestPanelScale, party.Count - GAME_PARTY_SIZE);
-                    ___restModulesTable.localScale = originalModulesScale * scale;
-                    ___characterPlatesTable.localScale = originalPlatesScale * scale;
+                    var scale = (float)Math.Pow(Main.Settings.RestPanelScale, party.Count - GAME_PARTY_SIZE);
+                    ___restModulesTable.localScale = new Vector3(scale, scale, scale);
+                    ___characterPlatesTable.localScale = new Vector3(scale, scale, scale);
                 } else
                 {
-                    ___restModulesTable.localScale = originalModulesScale;
-                    ___characterPlatesTable.localScale = originalPlatesScale;
+                    ___restModulesTable.localScale = new Vector3(1, 1, 1);
+                    ___characterPlatesTable.localScale = new Vector3(1, 1, 1);
                 }
             }
         }
