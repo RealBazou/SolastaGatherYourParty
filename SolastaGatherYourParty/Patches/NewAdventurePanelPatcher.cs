@@ -7,7 +7,7 @@ using static SolastaGatherYourParty.Settings;
 
 namespace SolastaGatherYourParty.Patches
 {
-    internal static class NewAdventurePanelPatcher
+    class NewAdventurePanelPatcher
     {
         [HarmonyPatch(typeof(NewAdventurePanel), "SelectUserLocation")]
         internal static class NewAdventurePanel_SelectUserLocation_Patch

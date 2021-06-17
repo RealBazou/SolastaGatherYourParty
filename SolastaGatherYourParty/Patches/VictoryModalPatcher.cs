@@ -5,7 +5,7 @@ using static SolastaGatherYourParty.Settings;
 
 namespace SolastaGatherYourParty.Patches
 {
-    internal static class VictoryModalPatcher
+    class VictoryModalPatcher
     {
         [HarmonyPatch(typeof(VictoryModal), "OnBeginShow")]
         internal static class VictoryModal_OnBeginShow_Patch

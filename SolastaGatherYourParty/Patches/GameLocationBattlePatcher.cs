@@ -2,7 +2,7 @@
 
 namespace SolastaGatherYourParty.Patches
 {
-    internal static class GameLocationBattlePatcher
+    class GameLocationBattlePatcher
     {
         internal static PlayerController AiPlayerController;
 

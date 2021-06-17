@@ -5,7 +5,7 @@ using static SolastaGatherYourParty.Settings;
 
 namespace SolastaGatherYourParty.Patches
 {
-    internal static class RestSubPanelPatcher
+    class RestSubPanelPatcher
     {
         [HarmonyPatch(typeof(RestSubPanel), "OnBeginShow")]
         internal static class RestSubPanel_OnBeginShow_Patch
